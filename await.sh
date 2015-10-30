@@ -8,7 +8,7 @@ await_zk() {
   EXHIBITOR_STATUS_URL="${EXHIBITOR_URL}exhibitor/v1/cluster/status"
 
   echo "Waiting for ZooKeeper"
-  printf "Polling Exhibitor ($EXHIBITOR_STATUS_URL) ..."
+  echo "Polling Exhibitor ($EXHIBITOR_STATUS_URL) ..."
   
   until $(curl --output /dev/null --silent --head --fail ${EXHIBITOR_STATUS_URL}); do
     printf '.'
@@ -18,7 +18,8 @@ await_zk() {
   ZK_HOST_CMD="curl --silent --fail ${EXHIBITOR_STATUS_URL} | jq '.[] | select(.code == 3) | .hostname' -r"
   ZK_HOST=$(eval $ZK_HOST_CMD)
   if [ -z "$ZK_HOST" ]; then
-    printf "\nZooKeeper is launched.\nWaiting for ZooKeeper to be initialized..."
+    echo ""
+    echo "ZooKeeper is launched.  Waiting for it to initialize..."
   fi
   until [ -n "$ZK_HOST" ]; do
     printf '.'
